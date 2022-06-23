@@ -3,12 +3,14 @@ WORKDIR /app
 EXPOSE 80
 EXPOSE 443
 
+ENV REDIS_HOST=172.17.0.1
+
 FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build
 WORKDIR /src
-COPY ["DAYOrchestrator/DAYOrchestrator.csproj", "DAYOrchestrator/"]
-RUN dotnet restore "DAYOrchestrator/DAYOrchestrator.csproj"
+COPY ["DAYOrchestrator.csproj", "DAYOrchestrator.csproj"]
+RUN dotnet restore "DAYOrchestrator.csproj"
 COPY . .
-WORKDIR "/src/DAYOrchestrator"
+WORKDIR "/src"
 RUN dotnet build "DAYOrchestrator.csproj" -c Release -o /app/build
 
 FROM build AS publish

@@ -8,7 +8,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
 builder.Services.AddHostedService<PingService>();
 
-var redis = ConnectionMultiplexer.Connect("localhost");
+var redis = ConnectionMultiplexer.Connect(Environment.GetEnvironmentVariable("REDIS_HOST")!);
 builder.Services.AddSingleton<IConnectionMultiplexer>(redis);
 
 var manager = new ServerManager(redis);
