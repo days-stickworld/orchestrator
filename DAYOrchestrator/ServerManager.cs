@@ -41,7 +41,7 @@ public class ServerManager
             node.LastResponse = DateTimeOffset.Now.ToUnixTimeMilliseconds();
             node.OnlinePlayers = response.OnlinePlayers;
             node.MaxPlayers = response.MaxPlayers;
-            _nodes.Add(node.Identifier, node);
+            _nodes[node.Identifier] = node;
         });
     }
 
