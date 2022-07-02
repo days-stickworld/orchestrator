@@ -16,7 +16,7 @@ public class PingService : IHostedService, IDisposable
     
     public Task StartAsync(CancellationToken cancellationToken)
     {
-        _timer = new Timer(DoWork, null, TimeSpan.Zero, TimeSpan.FromSeconds(10));
+        _timer = new Timer(DoWork, null, TimeSpan.Zero, TimeSpan.FromSeconds(5));
         return Task.CompletedTask;
     }
 
@@ -28,7 +28,7 @@ public class PingService : IHostedService, IDisposable
         foreach (var node in _serverManager.GetActiveNodes())
         {
             var diff = time - node.LastResponse;
-            if (diff > 30000)
+            if (diff > 10000)
             {
                 _serverManager.RegisterUnresponsiveNode(node.Identifier);
             }
