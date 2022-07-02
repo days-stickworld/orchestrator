@@ -4,14 +4,14 @@ namespace DAYOrchestrator;
 
 public class PingService : IHostedService, IDisposable
 {
-    private readonly ILogger<PingService> _logger;
     private readonly ISubscriber _sub;
+    private readonly ServerManager _serverManager;
     private Timer? _timer;
 
-    public PingService(ILogger<PingService> logger, IConnectionMultiplexer redis)
+    public PingService(IConnectionMultiplexer redis, ServerManager serverManager)
     {
-        _logger = logger;
         _sub = redis.GetSubscriber();
+        _serverManager = serverManager;
     }
     
     public Task StartAsync(CancellationToken cancellationToken)
@@ -23,6 +23,16 @@ public class PingService : IHostedService, IDisposable
     private void DoWork(object? state)
     {
         _sub.Publish("server:ping", "");
+
+        var time = DateTimeOffset.Now.ToUnixTimeMilliseconds();
+        foreach (var node in _serverManager.GetActiveNodes())
+        {
+            var diff = time - node.LastResponse;
+            if (diff > 30000)
+            {
+                _serverManager.RegisterUnresponsiveNode(node.Identifier);
+            }
+        }
     }
 
     public Task StopAsync(CancellationToken cancellationToken)
