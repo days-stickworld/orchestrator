@@ -30,18 +30,28 @@ public class ServerManager
 
         sub.Subscribe("server:status", (_, msg) =>
         {
-            Console.WriteLine(msg.ToString());
             var response = JsonSerializer.Deserialize<PingResponse>(msg.ToString());
             if (response?.Status != "OK") _nodes.Remove(response!.Identifier);
             if (response.CpuLoad > 70 || response.MemoryLoad > 70 || (response.MaxPlayers - response.OnlinePlayers) < 30)
             {
                 //TODO: Spin up new server
             }
+
+            var node = _nodes[response.Identifier];
+            node.LastResponse = DateTimeOffset.Now.ToUnixTimeMilliseconds();
+            node.OnlinePlayers = response.OnlinePlayers;
+            node.MaxPlayers = response.MaxPlayers;
+            _nodes[node.Identifier] = node;
         });
     }
 
     public ServerNode[] GetActiveNodes()
     {
         return _nodes.Values.ToArray();
+    }
+
+    public void RegisterUnresponsiveNode(string identifier)
+    {
+        _nodes.Remove(identifier);
     }
 }
