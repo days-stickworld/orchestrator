@@ -75,7 +75,17 @@ public class ServerManager
         
         var redisHost = Environment.GetEnvironmentVariable("REDIS_HOST");
         var serverHost = Environment.GetEnvironmentVariable("PUBLIC_IP");
-        var networkArg = Environment.GetEnvironmentVariable("NETWORK_ARG") ?? "";
+
+        string networkArg;
+        if (Environment.GetEnvironmentVariable("DOCKER_NETWORK") != null)
+        {
+            networkArg = " --network" + Environment.GetEnvironmentVariable("DOCKER_NETWORK");
+        }
+        else
+        {
+            networkArg = "";
+        }
+        
         var serverId = "days-stickworld-eu-" + _nodes.Count + 1;
         var serverPort = 15000 + _nodes.Count + 1;
 
