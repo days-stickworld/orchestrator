@@ -15,9 +15,6 @@ jobs:
     permissions:
       contents: read
       packages: write
-    environment:
-      name: orchestrator
-      url: https://orch.day-mmorpg.ipictserver.nl
 
     steps:
       - uses: actions/checkout@v3
