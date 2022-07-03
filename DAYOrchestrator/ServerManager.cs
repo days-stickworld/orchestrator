@@ -79,7 +79,7 @@ public class ServerManager
         string networkArg;
         if (Environment.GetEnvironmentVariable("DOCKER_NETWORK") != null)
         {
-            networkArg = " --network" + Environment.GetEnvironmentVariable("DOCKER_NETWORK");
+            networkArg = " --network " + Environment.GetEnvironmentVariable("DOCKER_NETWORK");
         }
         else
         {
