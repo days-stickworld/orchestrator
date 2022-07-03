@@ -75,10 +75,11 @@ public class ServerManager
         
         var redisHost = Environment.GetEnvironmentVariable("REDIS_HOST");
         var serverHost = Environment.GetEnvironmentVariable("PUBLIC_IP");
+        var networkArg = Environment.GetEnvironmentVariable("NETWORK_ARG") ?? "";
         var serverId = "days-stickworld-eu-" + _nodes.Count + 1;
         var serverPort = 15000 + _nodes.Count + 1;
-        
-        var command = $"docker run -d -p {serverPort}:7777/udp -e REDIS_HOST={redisHost} -e SERVER_CLUSTER=EU-1 -e SERVER_HOST={serverHost} -e SERVER_ID={serverId} -e SERVER_PORT={serverPort} ghcr.io/days-stickworld/game:latest";
+
+        var command = $"docker run -d -p {serverPort}:7777/udp -e REDIS_HOST={redisHost} -e SERVER_CLUSTER=EU-1 -e SERVER_HOST={serverHost} -e SERVER_ID={serverId} -e SERVER_PORT={serverPort}{networkArg} ghcr.io/days-stickworld/game:latest";
         Console.WriteLine(command);
         
         process.Start();
