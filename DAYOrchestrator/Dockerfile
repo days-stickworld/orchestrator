@@ -4,6 +4,10 @@ EXPOSE 80
 EXPOSE 443
 
 ENV REDIS_HOST=172.17.0.1
+ENV PUBLIC_IP=172.17.0.1
+
+RUN apt-get update
+RUN apt-get install docker.io -y
 
 FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build
 WORKDIR /src
